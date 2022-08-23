@@ -1,5 +1,6 @@
 import requests
 import simplejson as json
+from google.cloud import storage
 
 def get_schedule(startDate="2021-11-15", endDate="2021-11-17"):
     """This function extracts all the NHL games results of games
