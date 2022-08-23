@@ -24,4 +24,4 @@ if __name__ == '__main__':
     file_name = 'schedule_20211115_20211117.json'
     storage_client = storage.Client()
     storage_client.get_bucket('nhl-wizard-data').blob(file_name).upload_from_string(schedule)
-    return 'Success!'
+    print('Success!')
