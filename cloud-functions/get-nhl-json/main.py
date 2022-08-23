@@ -19,7 +19,7 @@ def get_schedule(startDate="2021-11-15", endDate="2021-11-17"):
     return response.json()
 
 
-def get_nhl_json(self)
+def get_nhl_json(self):
     schedule = get_schedule()
     file_name = 'schedule_20211115_20211117.json'
     storage_client = storage.Client()
