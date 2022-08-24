@@ -16,7 +16,7 @@ def get_schedule(startDate="2021-11-15", endDate="2021-11-17"):
 
     Returns: A json file containing the requested information.
     """
-    response = requests.get('https://statsapi.web.nhl.com/api/v1/schedule?date={}&{}'.format(startDate,endDate))
+    response = requests.get('https://statsapi.web.nhl.com/api/v1/schedule?startDate={}&endDate={}'.format(startDate,endDate))
     return response.json()
 
 
