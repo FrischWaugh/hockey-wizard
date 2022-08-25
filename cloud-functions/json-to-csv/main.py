@@ -1,12 +1,25 @@
 import simplejson as json
 from google.cloud import storage
 
-def get_json(filename):
+def list_blobs(bucket_name):
+    """
+    Lists all the blobs in the bucket.
+    """
+    storage_client = storage.Client()
+    # Note: Client.list_blobs requires at least package version 1.17.0.
+    blobs = storage_client.list_blobs(bucket_name)
+    blob_list = []
+    for blob in blobs:
+        blob_list.append(blob.name)
+    return blob_list
+
+def get_json(filename, bucket_name):
     """
     This function will get the json object from google cloud storage bucket.
     """
     # get the blob
-    blob = storage_client.get_bucket('nhl-wizard-data').get_blob(filename)
+    storage_client = storage.Client()
+    blob = storage_client.get_bucket(bucket_name).get_blob(filename)
     # load blob using json
     file_data = json.loads(blob.download_as_string())
     return file_data
@@ -36,9 +49,12 @@ def schedule_to_csv(schedule):
   return '\n'.join(game_list)
 
 def json_to_csv(self):
-  schedule = get_json('schedule_20211115_20211117.json')
-  content = schedule_to_csv(schedule)
-  file_name = 'schedule_20211115_20211117.csv'
   storage_client = storage.Client()
-  storage_client.get_bucket('nhl-wizard-data').blob(file_name).upload_from_string(content)
+  # list of files in bucket
+  files = list_blobs('nhl-wizard-landing')
+  for file in files:
+    schedule = get_json(file, 'nhl-wizard-landing')
+    content = schedule_to_csv(schedule)
+    file_name = 'tmp.csv'
+    storage_client.get_bucket('nhl-wizard-schedule').blob(file_name).upload_from_string(content)
   return 'Success!'

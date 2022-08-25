@@ -28,7 +28,7 @@ def get_nhl_json(self):
     file_name = 'schedule_20211115_20211117.json'
     storage_client = storage.Client()
     # create a blob
-    blob = storage_client.get_bucket('nhl-wizard-data').blob(file_name)
+    blob = storage_client.get_bucket('nhl-wizard-landing').blob(file_name)
     # upload the blob 
     blob.upload_from_string(data=json.dumps(schedule),content_type='application/json')
     return('Success!')
