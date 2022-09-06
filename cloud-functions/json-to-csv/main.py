@@ -53,10 +53,32 @@ def schedule_to_csv(schedule):
       game_list.append(string)
   return '\n'.join(game_list)
 
+def boxscore_to_csv(boxscore):
+  game_list = []
+  for game in boxscore.keys():
+    gameID = game
+    for team in boxscore[game]:
+      homeAway = team
+      goals = str(boxscore[game][team]['teamSkaterStats']['goals'])
+      pim = str(boxscore[game][team]['teamSkaterStats']['pim'])
+      shots = str(boxscore[game][team]['teamSkaterStats']['shots'])
+      powerPlayPercentage = str(boxscore[game][team]['teamSkaterStats']['powerPlayPercentage'])
+      powerPlayGoals = str(round(boxscore[game][team]['teamSkaterStats']['powerPlayGoals']))
+      powerPlayOpportunities = str(round(boxscore[game][team]['teamSkaterStats']['powerPlayOpportunities']))
+      faceOffWinPercentage = str(boxscore[game][team]['teamSkaterStats']['faceOffWinPercentage'])
+      blocked = str(boxscore[game][team]['teamSkaterStats']['blocked'])
+      takeaways = str(boxscore[game][team]['teamSkaterStats']['takeaways'])
+      giveaways = str(boxscore[game][team]['teamSkaterStats']['giveaways'])
+      hits = str(boxscore[game][team]['teamSkaterStats']['hits'])
+      string = gameID + ',' + homeAway + ',' + goals + ',' + pim + ',' + shots + ',' + powerPlayPercentage + ',' + powerPlayGoals + ',' + powerPlayOpportunities + ',' + faceOffWinPercentage + ',' + blocked + ',' + takeaways + ',' + giveaways + ',' + hits
+      game_list.append(string)
+  return '\n'.join(game_list)
+
 def json_to_csv(self):
   storage_client = inst_storage_client(path_key='gcloud_private_key.json', local=True)
   # Get schedule files
   files = list_blobs('nhl-wizard-landing', storage_client)
+  # Iterate through files
   for file in files:
     if 'schedule' in file:
       schedule = get_json(file, 'nhl-wizard-landing', storage_client)
@@ -64,12 +86,10 @@ def json_to_csv(self):
       file_name = 'schedule/schedule.csv'
       storage_client.get_bucket('nhl-wizard-bd').blob(file_name).upload_from_string(content)
     elif 'boxscore' in file:
-      print('boxscore')
-  # Get boxscore files
-#  boxscore_files = list_blobs('nhl-wizard-landing/boxscore', storage_client)
-#  for file in schedule_files:
-#    boxscore = get_json(file, 'nhl-wizard-landing', storage_client)
-#    content = schedule_to_csv(boxscore)
-#    file_name = 'boxscore/boxscore.csv'
-#    storage_client.get_bucket('nhl-wizard-schedule').blob(file_name).upload_from_string(content)
+      boxscore = get_json(file, 'nhl-wizard-landing', storage_client)
+      content = boxscore_to_csv(boxscore)
+      file_name = 'boxscore/boxscore.csv'
+      storage_client.get_bucket('nhl-wizard-bd').blob(file_name).upload_from_string(content)
   return 'Success!'
+
+json_to_csv(1)
