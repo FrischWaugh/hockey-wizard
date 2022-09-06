@@ -24,11 +24,16 @@ def get_nhl_json(self):
     """
     This function will create json object in google cloud storage.
     """
+    # Get schedule
     schedule = get_schedule()
-    file_name = 'schedule_20211115_20211117.json'
+    # Get boxscore
+    boxscore = get_boxscore(schedule)
+    # Instantiate the storage client
     storage_client = storage.Client()
-    # create a blob
-    blob = storage_client.get_bucket('nhl-wizard-landing').blob(file_name)
-    # upload the blob 
-    blob.upload_from_string(data=json.dumps(schedule),content_type='application/json')
+    # Create a blobs
+    blob_schedule = storage_client.get_bucket('nhl-wizard-landing').blob('schedule/schedule_20211015_20211016.json')
+    blob_boxscore = storage_client.get_bucket('nhl-wizard-landing').blob('boxscore/boxscore_20211015_20211016.json')
+    # Upload the blob 
+    blob_schedule.upload_from_string(data=json.dumps(schedule), content_type='application/json')
+    blob_boxscore.upload_from_string(data=json.dumps(boxscore), content_type='application/json')
     return('Success!')
