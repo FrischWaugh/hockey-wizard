@@ -19,6 +19,28 @@ def get_schedule(startDate="2021-11-15", endDate="2021-11-17"):
     response = requests.get('https://statsapi.web.nhl.com/api/v1/schedule?startDate={}&endDate={}'.format(startDate,endDate))
     return response.json()
 
+def get_boxscore(schedule_json):
+    """
+    This function gets boxscore json.
+    """
+    dict_nhl = {}
+    for date in schedule_json['dates']:
+        for game in date['games']:
+            response = requests.get(url='https://statsapi.web.nhl.com/api/v1/game/{}/boxscore'.format(game['gamePk']))
+            dict_nhl[game['gamePk']] = {'home': response.json()['teams']['home']['teamStats'],
+                                        'away': response.json()['teams']['away']['teamStats']}
+    return dict_nhl
+
+def inst_storage_client(path_key, local=True):
+    """
+    This function instantiate the storage object from gcp. It can be used locally or not.
+    """
+    if local==True:
+      storage_client = storage.Client.from_service_account_json(path_key)
+    else:
+      storage_client = storage.Client()
+    return storage_client
+
 
 def get_nhl_json(self):
     """
@@ -29,7 +51,7 @@ def get_nhl_json(self):
     # Get boxscore
     boxscore = get_boxscore(schedule)
     # Instantiate the storage client
-    storage_client = storage.Client()
+    storage_client = inst_storage_client(path_key='../gcloud_private_key.json', local=True)
     # Create a blobs
     blob_schedule = storage_client.get_bucket('nhl-wizard-landing').blob('schedule/schedule_20211015_20211016.json')
     blob_boxscore = storage_client.get_bucket('nhl-wizard-landing').blob('boxscore/boxscore_20211015_20211016.json')
