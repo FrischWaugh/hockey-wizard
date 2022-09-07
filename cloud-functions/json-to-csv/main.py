@@ -56,21 +56,22 @@ def schedule_to_csv(schedule):
 def boxscore_to_csv(boxscore):
   game_list = []
   for game in boxscore.keys():
-    gameID = game
+    gameID = str(game)
     for team in boxscore[game]:
+      teamID = str(boxscore[game][team]['teamID'])
       homeAway = team
-      goals = str(boxscore[game][team]['teamSkaterStats']['goals'])
-      pim = str(boxscore[game][team]['teamSkaterStats']['pim'])
-      shots = str(boxscore[game][team]['teamSkaterStats']['shots'])
-      powerPlayPercentage = str(boxscore[game][team]['teamSkaterStats']['powerPlayPercentage'])
-      powerPlayGoals = str(round(boxscore[game][team]['teamSkaterStats']['powerPlayGoals']))
-      powerPlayOpportunities = str(round(boxscore[game][team]['teamSkaterStats']['powerPlayOpportunities']))
-      faceOffWinPercentage = str(boxscore[game][team]['teamSkaterStats']['faceOffWinPercentage'])
-      blocked = str(boxscore[game][team]['teamSkaterStats']['blocked'])
-      takeaways = str(boxscore[game][team]['teamSkaterStats']['takeaways'])
-      giveaways = str(boxscore[game][team]['teamSkaterStats']['giveaways'])
-      hits = str(boxscore[game][team]['teamSkaterStats']['hits'])
-      string = gameID + ',' + homeAway + ',' + goals + ',' + pim + ',' + shots + ',' + powerPlayPercentage + ',' + powerPlayGoals + ',' + powerPlayOpportunities + ',' + faceOffWinPercentage + ',' + blocked + ',' + takeaways + ',' + giveaways + ',' + hits
+      goals = str(boxscore[game][team]['teamStats']['goals'])
+      pim = str(boxscore[game][team]['teamStats']['pim'])
+      shots = str(boxscore[game][team]['teamStats']['shots'])
+      powerPlayPercentage = str(boxscore[game][team]['teamStats']['powerPlayPercentage'])
+      powerPlayGoals = str(round(boxscore[game][team]['teamStats']['powerPlayGoals']))
+      powerPlayOpportunities = str(round(boxscore[game][team]['teamStats']['powerPlayOpportunities']))
+      faceOffWinPercentage = str(boxscore[game][team]['teamStats']['faceOffWinPercentage'])
+      blocked = str(boxscore[game][team]['teamStats']['blocked'])
+      takeaways = str(boxscore[game][team]['teamStats']['takeaways'])
+      giveaways = str(boxscore[game][team]['teamStats']['giveaways'])
+      hits = str(boxscore[game][team]['teamStats']['hits'])
+      string = gameID + ',' + teamID + ',' +  homeAway + ',' + goals + ',' + pim + ',' + shots + ',' + powerPlayPercentage + ',' + powerPlayGoals + ',' + powerPlayOpportunities + ',' + faceOffWinPercentage + ',' + blocked + ',' + takeaways + ',' + giveaways + ',' + hits
       game_list.append(string)
   return '\n'.join(game_list)
 
@@ -91,5 +92,3 @@ def json_to_csv(self):
       file_name = 'boxscore/boxscore.csv'
       storage_client.get_bucket('nhl-wizard-bd').blob(file_name).upload_from_string(content)
   return 'Success!'
-
-json_to_csv(1)
