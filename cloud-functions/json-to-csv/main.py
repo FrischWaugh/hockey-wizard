@@ -84,11 +84,11 @@ def json_to_csv(self):
     if 'schedule' in file:
       schedule = get_json(file, 'nhl-wizard-landing', storage_client)
       content = schedule_to_csv(schedule)
-      file_name = 'schedule/schedule.csv'
+      file_name = 'schedule/schedule_20200801_20220731.csv'
       storage_client.get_bucket('nhl-wizard-bd').blob(file_name).upload_from_string(content)
     elif 'boxscore' in file:
       boxscore = get_json(file, 'nhl-wizard-landing', storage_client)
       content = boxscore_to_csv(boxscore)
-      file_name = 'boxscore/boxscore.csv'
+      file_name = 'boxscore/boxscore_20200801_20220731.csv'
       storage_client.get_bucket('nhl-wizard-bd').blob(file_name).upload_from_string(content)
   return 'Success!'

@@ -1,2 +1,5 @@
 gcloud_private_key.json
-env/
+venv/
+venv3.7/
+models/
+test-cases/

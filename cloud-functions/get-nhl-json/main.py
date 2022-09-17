@@ -2,7 +2,7 @@ import requests
 import simplejson as json
 from google.cloud import storage
 
-def get_schedule(startDate="2021-11-15", endDate="2021-11-17"):
+def get_schedule(startDate="2020-08-01", endDate="2022-07-31"):
     """
     This function extracts all the NHL games results of games
     played between startDate and endDate.
@@ -55,10 +55,9 @@ def get_nhl_json(self):
     # Instantiate the storage client
     storage_client = inst_storage_client(path_key='gcloud_private_key.json', local=True)
     # Create a blobs
-    blob_schedule = storage_client.get_bucket('nhl-wizard-landing').blob('schedule/schedule_20211015_20211016.json')
-    blob_boxscore = storage_client.get_bucket('nhl-wizard-landing').blob('boxscore/boxscore_20211015_20211016.json')
+    blob_schedule = storage_client.get_bucket('nhl-wizard-landing').blob('schedule/schedule_20200801_20220731.json')
+    blob_boxscore = storage_client.get_bucket('nhl-wizard-landing').blob('boxscore/boxscore_20200801_20220731.json')
     # Upload the blob 
     blob_schedule.upload_from_string(data=json.dumps(schedule), content_type='application/json')
     blob_boxscore.upload_from_string(data=json.dumps(boxscore), content_type='application/json')
     return('Success!')
-    
